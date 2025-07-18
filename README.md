@@ -178,7 +178,7 @@ pip install scikit-learn pandas numpy xgboost flask joblib matplotlib seaborn
 
 ## 📱 Live Demo
 
-Visit the deployed application: [AutoPrice AI](https://transcendent-dasik-bf5d1e.netlify.app)
+Visit the deployed application: [AutoPrice AI](https://carpriceestimator.netlify.app/)
 
 ## 🤝 Contributing
 
