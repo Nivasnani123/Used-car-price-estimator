@@ -1,4 +1,4 @@
-# AutoPrice AI - Indian Used Car Price Estimator
+# Used Car Price Estimator
 
 A comprehensive machine learning application that predicts used car prices in the Indian market using advanced regression algorithms.
 
