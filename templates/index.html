@@ -1,0 +1,314 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="text-center mb-8">
+        <div class="flex items-center justify-center gap-3 mb-4">
+            <svg class="w-10 h-10 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"></path>
+                <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1V8a1 1 0 00-1-1h-3z"></path>
+            </svg>
+            <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                AutoPrice AI
+            </h1>
+        </div>
+        <p class="text-lg text-gray-600">
+            Advanced machine learning algorithms for accurate used car price predictions
+        </p>
+        <div class="mt-4">
+            <a href="/about" class="text-blue-600 hover:text-blue-800 underline">Learn about our AI algorithms</a>
+        </div>
+    </div>
+
+    <!-- Error Display -->
+    <div id="error" style="display: none;"></div>
+
+    <!-- Car Input Form -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+        <div class="flex items-center gap-2 mb-6">
+            <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"></path>
+                <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1V8a1 1 0 00-1-1h-3z"></path>
+            </svg>
+            <h2 class="text-2xl font-bold text-gray-800">Car Details</h2>
+        </div>
+
+        <form id="carForm" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Make</label>
+                    <select id="make" name="make" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        <option value="">Select Make</option>
+                        {% for make in car_makes %}
+                        <option value="{{ make }}">{{ make }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Model</label>
+                    <select id="model" name="model" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required disabled>
+                        <option value="">Select Model</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Year</label>
+                    <input type="number" id="year" name="year" min="1990" max="{{ current_year }}" value="2022" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Mileage (km)</label>
+                    <input type="number" id="mileage" name="mileage" min="0" value="15000" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Condition</label>
+                    <select id="condition" name="condition" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="Poor">Poor</option>
+                        <option value="Fair">Fair</option>
+                        <option value="Good" selected>Good</option>
+                        <option value="Very Good">Very Good</option>
+                        <option value="Excellent">Excellent</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Fuel Type</label>
+                    <select id="fuel_type" name="fuel_type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="Petrol" selected>Petrol</option>
+                        <option value="Diesel">Diesel</option>
+                        <option value="Electric">Electric</option>
+                        <option value="Hybrid">Hybrid</option>
+                        <option value="CNG">CNG</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Transmission</label>
+                    <select id="transmission" name="transmission" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="Manual">Manual</option>
+                        <option value="Automatic" selected>Automatic</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Body Type</label>
+                    <select id="body_type" name="body_type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="Sedan" selected>Sedan</option>
+                        <option value="SUV">SUV</option>
+                        <option value="Hatchback">Hatchback</option>
+                        <option value="Coupe">Coupe</option>
+                        <option value="Convertible">Convertible</option>
+                        <option value="Wagon">Wagon</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Engine Size (L)</label>
+                    <input type="number" id="engine_size" name="engine_size" min="0" max="10" step="0.1" value="2.0" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Previous Owners</label>
+                    <input type="number" id="previous_owners" name="previous_owners" min="0" max="10" value="1" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition-colors font-medium">
+                Predict Price
+            </button>
+        </form>
+    </div>
+
+    <!-- Loading -->
+    <div id="loading" style="display: none;" class="text-center py-8">
+        <div class="inline-flex items-center gap-2">
+            <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span class="text-gray-600">Analyzing car data with AI algorithms...</span>
+        </div>
+    </div>
+
+    <!-- Results -->
+    <div id="results" style="display: none;" class="bg-white rounded-lg shadow-lg p-6">
+        <div class="flex items-center gap-2 mb-6">
+            <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd"></path>
+            </svg>
+            <h2 class="text-2xl font-bold text-gray-800">Price Predictions</h2>
+        </div>
+        <div id="predictions-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Predictions will be inserted here -->
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const carModels = {{ car_models | tojsonfilter }};
+    
+    // Handle make selection
+    document.getElementById('make').addEventListener('change', function() {
+        const make = this.value;
+        const modelSelect = document.getElementById('model');
+        
+        // Clear existing options
+        modelSelect.innerHTML = '<option value="">Select Model</option>';
+        
+        if (make && carModels[make]) {
+            modelSelect.disabled = false;
+            carModels[make].forEach(model => {
+                const option = document.createElement('option');
+                option.value = model;
+                option.textContent = model;
+                modelSelect.appendChild(option);
+            });
+        } else {
+            modelSelect.disabled = true;
+        }
+    });
+    
+    // Handle form submission
+    document.getElementById('carForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        hideError();
+        showLoading(true);
+        
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+        
+        // Convert numeric fields
+        data.year = parseInt(data.year);
+        data.mileage = parseInt(data.mileage);
+        data.engine_size = parseFloat(data.engine_size);
+        data.previous_owners = parseInt(data.previous_owners);
+        
+        try {
+            const response = await fetch('/api/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                displayPredictions(result.predictions);
+            } else {
+                showError(result.error || 'Prediction failed');
+            }
+        } catch (error) {
+            showError('Network error: ' + error.message);
+        } finally {
+            showLoading(false);
+        }
+    });
+    
+    function displayPredictions(predictions) {
+        const container = document.getElementById('predictions-container');
+        container.innerHTML = '';
+        
+        const algorithms = ['random_forest', 'gradient_boosting', 'xgboost'];
+        const algorithmNames = {
+            'random_forest': 'Random Forest',
+            'gradient_boosting': 'Gradient Boosting',
+            'xgboost': 'XGBoost'
+        };
+        
+        const colors = {
+            'random_forest': 'bg-blue-100 text-blue-800',
+            'gradient_boosting': 'bg-green-100 text-green-800',
+            'xgboost': 'bg-purple-100 text-purple-800'
+        };
+        
+        algorithms.forEach(algo => {
+            if (predictions[algo]) {
+                const pred = predictions[algo];
+                const div = document.createElement('div');
+                div.className = 'border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow';
+                
+                div.innerHTML = `
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="px-2 py-1 rounded-full text-xs font-medium ${colors[algo]}">
+                            ${algorithmNames[algo]}
+                        </span>
+                        <div class="flex items-center gap-1">
+                            <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-sm font-medium text-green-600">
+                                ${(pred.confidence * 100).toFixed(0)}%
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-gray-800 mb-2">
+                            ${formatCurrency(pred.predicted_price)}
+                        </div>
+                        
+                        <div class="text-sm text-gray-600 mb-3">
+                            Confidence Interval
+                        </div>
+                        
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">
+                                Low: ${formatCurrency(pred.confidence_interval.lower)}
+                            </span>
+                            <span class="text-gray-600">
+                                High: ${formatCurrency(pred.confidence_interval.upper)}
+                            </span>
+                        </div>
+                        
+                        <div class="mt-3 bg-gray-200 rounded-full h-2">
+                            <div class="bg-blue-600 h-2 rounded-full transition-all duration-500" style="width: ${pred.confidence * 100}%"></div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(div);
+            }
+        });
+        
+        // Add comparison summary
+        const summaryDiv = document.createElement('div');
+        summaryDiv.className = 'col-span-full mt-6 bg-blue-50 rounded-lg p-4';
+        
+        const avgPrice = algorithms.reduce((sum, algo) => {
+            return sum + (predictions[algo] ? predictions[algo].predicted_price : 0);
+        }, 0) / algorithms.filter(algo => predictions[algo]).length;
+        
+        const bestAlgo = algorithms.reduce((best, current) => {
+            if (!predictions[current]) return best;
+            if (!predictions[best]) return current;
+            return predictions[current].confidence > predictions[best].confidence ? current : best;
+        });
+        
+        summaryDiv.innerHTML = `
+            <div class="flex items-center gap-2 mb-2">
+                <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path>
+                </svg>
+                <h3 class="font-semibold text-blue-800">Model Comparison</h3>
+            </div>
+            <div class="text-sm text-blue-700">
+                <p class="mb-1">
+                    <strong>Best Performance:</strong> ${algorithmNames[bestAlgo]}
+                </p>
+                <p>
+                    <strong>Average Prediction:</strong> ${formatCurrency(avgPrice)}
+                </p>
+            </div>
+        `;
+        
+        container.appendChild(summaryDiv);
+    }
+</script>
+{% endblock %}

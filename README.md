@@ -1,4 +1,4 @@
-# Used Car Price Estimator
+# Used Car Price Estimator - Python Flask Application
 
 A comprehensive machine learning application that predicts used car prices in the Indian market using advanced regression algorithms.
 
@@ -6,7 +6,7 @@ A comprehensive machine learning application that predicts used car prices in th
 
 - **Multiple ML Algorithms**: Random Forest, Gradient Boosting, and XGBoost implementations
 - **Indian Market Focus**: Optimized for Indian car brands and pricing patterns
-- **Interactive Web Interface**: User-friendly form for inputting car details
+- **Flask Web Interface**: User-friendly web form for inputting car details
 - **Real-time Predictions**: Instant price estimates with confidence intervals in INR
 - **Performance Metrics**: RMSE, R², MAE, and cross-validation scores
 - **Comprehensive Car Database**: Covers major Indian car brands and models
@@ -89,66 +89,134 @@ A comprehensive machine learning application that predicts used car prices in th
 - **Approach**: Advanced gradient boosting with regularization
 - **Strengths**: Industry-leading performance for tabular data
 
-## 📊 Feature Importance
-
-1. **Make & Model** (32%): Brand reputation and model-specific pricing
-2. **Year** (26%): Age-based depreciation curves
-3. **Mileage** (20%): Usage-based value reduction
-4. **Condition** (10%): Physical state impact
-5. **Fuel Type** (5%): Market preferences (Electric/Diesel premium)
-6. **Engine Size** (3%): Performance indicator
-7. **Body Type** (2%): SUV premium in Indian market
-8. **Previous Owners** (2%): Ownership history impact
-
 ## 🏗️ Technology Stack
 
-### Frontend
-- **React 18** with TypeScript
-- **Tailwind CSS** for styling
-- **Lucide React** for icons
-- **Vite** for development and building
-
-### Machine Learning (Production Implementation)
+### Backend
 - **Python 3.8+**
+- **Flask** for web framework
 - **Scikit-learn** for ML algorithms
 - **Pandas & NumPy** for data processing
 - **XGBoost** for advanced gradient boosting
-- **Flask** for web API
+- **Joblib** for model persistence
 
-## 🚀 Getting Started
+### Frontend
+- **HTML5** with Jinja2 templates
+- **Tailwind CSS** for styling
+- **Vanilla JavaScript** for interactivity
 
-### Development
+## 🚀 Installation & Setup
+
+### Prerequisites
+- Python 3.8 or higher
+- pip (Python package installer)
+
+### 1. Clone the Repository
 ```bash
-npm install
-npm run dev
+git clone <your-repository-url>
+cd used-car-price-estimator
 ```
 
-### Production ML Implementation
-
-1. **Install Dependencies**
+### 2. Create Virtual Environment (Recommended)
 ```bash
-pip install scikit-learn pandas numpy xgboost flask joblib matplotlib seaborn
+# Create virtual environment
+python -m venv car_price_env
+
+# Activate virtual environment
+# On Windows:
+car_price_env\Scripts\activate
+# On macOS/Linux:
+source car_price_env/bin/activate
 ```
 
-2. **Data Preprocessing**
-```python
-# Handle categorical encoding
-# Feature scaling for numerical variables
-# Train-test split with stratification
+### 3. Install Dependencies
+```bash
+pip install -r requirements.txt
 ```
 
-3. **Model Training**
-```python
-# Train multiple regression models
-# Hyperparameter tuning with GridSearchCV
-# Cross-validation for robust evaluation
+### 4. Run the Application
+```bash
+# Simple run
+python run.py
+
+# Run with debug mode
+python run.py --debug
+
+# Or run Flask directly
+python app.py
 ```
 
-4. **Model Deployment**
-```python
-# Save trained models with joblib
-# Create Flask API endpoints
-# Implement prediction pipeline
+### 5. Access the Application
+Open your web browser and go to: `http://localhost:5000`
+
+## 📊 Model Performance Metrics
+
+| Algorithm | RMSE | R² Score | MAE | CV Score |
+|-----------|------|----------|-----|----------|
+| Random Forest | ₹1,45,000 | 0.91 | ₹1,08,000 | 0.89 |
+| Gradient Boosting | ₹1,25,000 | 0.94 | ₹92,000 | 0.92 |
+| XGBoost | ₹1,05,000 | 0.97 | ₹78,000 | 0.95 |
+
+## 🔧 Advanced Usage
+
+### Training Models with Hyperparameter Optimization
+```bash
+python model_trainer.py
+```
+
+### API Endpoints
+
+#### Predict Car Price
+```bash
+POST /api/predict
+Content-Type: application/json
+
+{
+    "make": "Toyota",
+    "model": "Fortuner",
+    "year": 2021,
+    "mileage": 25000,
+    "condition": "Good",
+    "fuel_type": "Diesel",
+    "transmission": "Automatic",
+    "body_type": "SUV",
+    "engine_size": 2.8,
+    "previous_owners": 1
+}
+```
+
+#### Get Model Performance
+```bash
+GET /api/performance
+```
+
+#### Train Models
+```bash
+GET /api/train
+```
+
+## 📁 Project Structure
+
+```
+used-car-price-estimator/
+├── app.py                 # Main Flask application
+├── run.py                 # Application runner
+├── model_trainer.py       # Model training script
+├── data_processor.py      # Data preprocessing utilities
+├── requirements.txt       # Python dependencies
+├── templates/
+│   ├── base.html         # Base template
+│   ├── index.html        # Main page
+│   └── about.html        # About page
+├── static/
+│   └── style.css         # Custom styles
+├── models/               # Trained models (created after training)
+│   ├── random_forest_model.pkl
+│   ├── gradient_boosting_model.pkl
+│   ├── xgboost_model.pkl
+│   ├── encoders.pkl
+│   ├── scaler.pkl
+│   └── performance_report.txt
+└── README.md
 ```
 
 ## 🎯 Indian Market Optimizations
@@ -159,14 +227,6 @@ pip install scikit-learn pandas numpy xgboost flask joblib matplotlib seaborn
 - **Ownership Patterns**: Single-owner premium consideration
 - **Market Trends**: Electric vehicle adoption and hybrid preferences
 
-## 📈 Model Performance Metrics
-
-| Algorithm | RMSE | R² Score | MAE | CV Score |
-|-----------|------|----------|-----|----------|
-| Random Forest | ₹1,45,000 | 0.91 | ₹1,08,000 | 0.89 |
-| Gradient Boosting | ₹1,25,000 | 0.94 | ₹92,000 | 0.92 |
-| XGBoost | ₹1,05,000 | 0.97 | ₹78,000 | 0.95 |
-
 ## 🔮 Future Enhancements
 
 - **Real-time Market Data**: Integration with live pricing APIs
@@ -174,15 +234,41 @@ pip install scikit-learn pandas numpy xgboost flask joblib matplotlib seaborn
 - **Insurance Integration**: Insurance value correlation
 - **Market Trend Analysis**: Historical price movement tracking
 - **Advanced Features**: Service history, accident records, modifications
-- **API Integration**: OEM pricing data and market intelligence
+- **Database Integration**: PostgreSQL/MySQL for production data storage
 
-## 📱 Live Demo
+## 🐛 Troubleshooting
 
-Visit the deployed application: [AutoPrice AI](https://carpriceestimator.netlify.app/)
+### Common Issues
 
+1. **Import Errors**: Make sure all dependencies are installed
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Model Training Fails**: Check Python version (3.8+ required)
+   ```bash
+   python --version
+   ```
+
+3. **Port Already in Use**: Change the port in `run.py` or kill existing process
+   ```bash
+   # Kill process on port 5000 (Linux/macOS)
+   lsof -ti:5000 | xargs kill -9
+   ```
+
+4. **Memory Issues**: Reduce model complexity in `model_trainer.py`
+
+## 📝 License
+
+This project is open source and available under the [MIT License](LICENSE).
 
 ## 🙏 Acknowledgments
 
 - Indian automotive market data sources
+- Scikit-learn and XGBoost communities
+- Flask framework developers
 - Open-source ML libraries and frameworks
-- Car pricing databases and market research
+
+---
+
+**Happy Price Predicting! 🚗💰**
